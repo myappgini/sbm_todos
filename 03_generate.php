@@ -69,6 +69,23 @@ $dest = $path . '/hooks';
 $MyPlugin->recurse_copy($source, $dest, true);
 
 //add code to hedear-extras.php ------------------------------------------------------
+
+$sql = file_get_contents(
+    dirname(__FILE__) . '/app-resources/todos/sql.sql'
+);
+if ($sql) {
+    $eo = ['silentErrors' => true];
+    $res = sql($sql, $eo);
+    if ($eo['error'] != '') {
+        $MyPlugin->progress_log->add(
+            'ERROR: Audit table not created',
+            'text-danger spacer'
+        );
+    } else {
+        $MyPlugin->progress_log->add('Audit table created');
+    }
+}
+
 $MyPlugin->progress_log->line();
 $code ="<?php include('hooks/todos/scripts.php');?>";
 $file_path = $path . '/hooks/footer-extras.php';
