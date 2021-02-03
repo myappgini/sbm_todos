@@ -1,0 +1,41 @@
+<!-- TO DO List -->
+<div class='box box-primary'>
+  <div class='box-header'>
+    <i class='glyphicon glyphicon-list-alt'></i>
+    <h3 class='box-title'>
+      To Do List
+    </h3>
+    <div class='box-tools pull-right'>
+      <button type='button' class='btn btn-box-tool view-trash'>
+        <i class='glyphicon glyphicon-trash'><span class="badge bg-danger label-trash">0</span></i></i>
+      </button>
+      <button type='button' class='btn btn-box-tool close-remove'>
+        <i class='glyphicon glyphicon-remove'></i>
+      </button>
+    </div>
+    <div class="progress" style="height: 4px; margin-bottom: 0px;margin-top: 5px;">
+      <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
+      </div>
+    </div>
+  </div>
+  <div class='box-body'>
+    <ul class='todo-list'>
+      {{#each tasks}}
+          {{> task}}
+      {{/each}}
+    </ul>
+
+  </div>
+  <div class='box-footer clearfix no-border'>
+    <div class='input-group'>
+      <input type='text' class='form-control task-to-add' placeholder='Enter task...' />
+      <span class='input-group-btn'>
+        <button class='btn btn-default add-todo-task' data-cmd="add-task" type='button'>
+          <i class='glyphicon glyphicon-plus'></i>
+          Add task
+        </button>
+      </span>
+    </div>
+  </div>
+</div>
+<!-- / TO DO List -->

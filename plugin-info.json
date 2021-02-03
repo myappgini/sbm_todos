@@ -1,0 +1,10 @@
+{
+        "title": "To Do List for AppGini",
+        "name": "ToDo",
+	"icon": "to_do.png",
+        "Author": "Alejandro Landini",
+        "Date": "02/02/2021",
+        "Updated": "02/02/21",
+        "Version":"1.0",
+        "product_use":"5.94"
+}
