@@ -1,5 +1,7 @@
 # To Do List
 
+![Todos](https://raw.githubusercontent.com/myappgini/sbm_todos/main/screenshoots/Screenshot_20210203_171828.png)
+
 ## To Do List plugin
 
 A simple list for managing tasks, you can add as many as you need, fulfill them, delete them and edit them.
@@ -54,3 +56,8 @@ Select To Do from plugin menu in admin area.
 Follow the steps.
 
 Then next to install needed files and enjoy.
+
+![Todos](https://raw.githubusercontent.com/myappgini/sbm_todos/main/screenshoots/Screenshot_20210203_172329.png)
+![Todos](https://raw.githubusercontent.com/myappgini/sbm_todos/main/screenshoots/Screenshot_20210203_172356.png)
+![Todos](https://raw.githubusercontent.com/myappgini/sbm_todos/main/screenshoots/Screenshot_20210203_172409.png)
+![Todos](https://raw.githubusercontent.com/myappgini/sbm_todos/main/screenshoots/Screenshot_20210203_172500.png)
