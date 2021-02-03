@@ -78,11 +78,11 @@ if ($sql) {
     $res = sql($sql, $eo);
     if ($eo['error'] != '') {
         $MyPlugin->progress_log->add(
-            'ERROR: Audit table not created',
+            'ERROR: Todos table not created',
             'text-danger spacer'
         );
     } else {
-        $MyPlugin->progress_log->add('Audit table created');
+        $MyPlugin->progress_log->add('Todos table created');
     }
 }
 
