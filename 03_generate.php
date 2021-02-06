@@ -57,10 +57,10 @@ $write_to_hooks = $_REQUEST['dont_write_to_hooks'] == 1 ? false : true;
 
 <?php
 $MyPlugin->progress_log->add("Output folder: $path", 'text-info');
+$MyPlugin->progress_log->ok();
 
 // * coping resources folders --------------------------------------------------
 
-$MyPlugin->progress_log->ok();
 $MyPlugin->progress_log->line();
 
 // * copy resources folder -----------------------------------------------------
