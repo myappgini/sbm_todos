@@ -87,18 +87,30 @@ if ($sql) {
 }
 
 $MyPlugin->progress_log->line();
-$code ="<?php include('hooks/todos/scripts.php');?>";
+$code = "<?php include('hooks/todos/scripts.php');?>";
 $file_path = $path . '/hooks/footer-extras.php';
-$res = $MyPlugin->add_to_file($file_path, false, $code);
 
-inspect_result($res, $file_path, $MyPlugin);
+if ($write_to_hooks) {
+    $res = $MyPlugin->add_to_file($file_path, false, $code);
+} else {
+    $code = "include('hooks/todos/scripts.php');";
+    $res = 'dont_write_to_hooks';
+}
+
+inspect_result($res, $file_path, $MyPlugin, $code);
 
 $MyPlugin->progress_log->line();
 $code ="<?php include('hooks/box/scripts.php');?>";
 $file_path = $path . '/hooks/footer-extras.php';
-$res = $MyPlugin->add_to_file($file_path, false, $code);
 
-inspect_result($res, $file_path, $MyPlugin);
+if ($write_to_hooks) {
+    $res = $MyPlugin->add_to_file($file_path, false, $code);
+} else {
+    $code = "include('hooks/box/scripts.php');";
+    $res = 'dont_write_to_hooks';
+}
+
+inspect_result($res, $file_path, $MyPlugin, $code);
 
 echo $MyPlugin->progress_log->show();
 
@@ -124,9 +136,18 @@ echo $MyPlugin->progress_log->show();
 <?php
 include dirname(__FILE__) . '/footer.php';
 
-function inspect_result($res, $file_path, &$MyPlugin)
+function inspect_result($res, $file_path, &$MyPlugin, $code_w )
 {
-    if ($res) {
+    if ($res === 'dont_write_to_hooks') {
+        $MyPlugin->progress_log->add(
+            "install code manually into '{$file_path}'.",
+            'text-warning spacer'
+        );
+        $MyPlugin->progress_log->add(
+            "Code to write: " . $code_w,
+            'text-warning spacer'
+        );
+    } elseif ($res) {
         $MyPlugin->progress_log->add(
             "Installed code into '{$file_path}'.",
             'text-success spacer'
