@@ -49,7 +49,7 @@ $write_to_hooks = $_REQUEST['dont_write_to_hooks'] == 1 ? false : true;
     </h1>
 	<p class="lead">
 		<a href="./index.php">Home</a> > 
-		<a href="./02_output.php">  Select output folder</a> > Coping Files MPI
+		<a href="./02_output.php">  Select output folder</a> > Coping Files <?php echo $info['title'] ?>
 	</p>
 </div>
 
@@ -58,18 +58,18 @@ $write_to_hooks = $_REQUEST['dont_write_to_hooks'] == 1 ? false : true;
 <?php
 $MyPlugin->progress_log->add("Output folder: $path", 'text-info');
 
-//coping resources folders
+// * coping resources folders --------------------------------------------------
 
 $MyPlugin->progress_log->ok();
 $MyPlugin->progress_log->line();
 
-//copy rouserse folder ------------------------------------------------------
+// * copy resources folder -----------------------------------------------------
 $source = dirname(__FILE__) . '/app-resources';
 $dest = $path . '/hooks';
 $MyPlugin->recurse_copy($source, $dest, true);
 
-//add code to hedear-extras.php ------------------------------------------------------
-
+//create database if not exist
+$MyPlugin->progress_log->line();
 $sql = file_get_contents(
     dirname(__FILE__) . '/app-resources/todos/sql.sql'
 );
@@ -78,19 +78,20 @@ if ($sql) {
     $res = sql($sql, $eo);
     if ($eo['error'] != '') {
         $MyPlugin->progress_log->add(
-            'ERROR: Todos table not created',
+            "ERROR: {$info['name']} table not created",
             'text-danger spacer'
         );
     } else {
-        $MyPlugin->progress_log->add('Todos table created');
+        $MyPlugin->progress_log->add("{$info['name']} table created",'text-success spacer' );
     }
 }
 
+// * add code to hedear-extras.php ---------------------------------------------
 $MyPlugin->progress_log->line();
-$code = "<?php include('hooks/todos/scripts.php');?>";
 $file_path = $path . '/hooks/footer-extras.php';
 
 if ($write_to_hooks) {
+    $code = "<?php include('hooks/todos/scripts.php');?>";
     $res = $MyPlugin->add_to_file($file_path, false, $code);
 } else {
     $code = "include('hooks/todos/scripts.php');";
@@ -100,10 +101,10 @@ if ($write_to_hooks) {
 inspect_result($res, $file_path, $MyPlugin, $code);
 
 $MyPlugin->progress_log->line();
-$code ="<?php include('hooks/box/scripts.php');?>";
 $file_path = $path . '/hooks/footer-extras.php';
 
 if ($write_to_hooks) {
+    $code ="<?php include('hooks/box/scripts.php');?>";
     $res = $MyPlugin->add_to_file($file_path, false, $code);
 } else {
     $code = "include('hooks/box/scripts.php');";
@@ -112,6 +113,11 @@ if ($write_to_hooks) {
 
 inspect_result($res, $file_path, $MyPlugin, $code);
 
+$MyPlugin->progress_log->line();
+$MyPlugin->progress_log->add(
+    "End Script.",
+    'text-success spacer'
+);
 echo $MyPlugin->progress_log->show();
 
 ?>
@@ -136,7 +142,7 @@ echo $MyPlugin->progress_log->show();
 <?php
 include dirname(__FILE__) . '/footer.php';
 
-function inspect_result($res, $file_path, &$MyPlugin, $code_w )
+function inspect_result($res, $file_path, &$MyPlugin, $code = "" )
 {
     if ($res === 'dont_write_to_hooks') {
         $MyPlugin->progress_log->add(
@@ -144,7 +150,7 @@ function inspect_result($res, $file_path, &$MyPlugin, $code_w )
             'text-warning spacer'
         );
         $MyPlugin->progress_log->add(
-            "Code to write: " . $code_w,
+            "Code to write: " . $code,
             'text-warning spacer'
         );
     } elseif ($res) {
@@ -168,6 +174,5 @@ function inspect_result($res, $file_path, &$MyPlugin, $code_w )
         }
     }
 }
-
 
 ?>
