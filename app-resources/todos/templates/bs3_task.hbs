@@ -1,15 +1,25 @@
-{{#unless deleted}}
-  <li data-ix = "{{@key}}" class="{{#if complete}} done {{/if}}">
+  <li data-ix = "{{uid}}" class="{{#if complete}} done {{/if}}">
     <span class='handle'>
       <i class='glyphicon glyphicon-th'></i>
     </span>
-
-    <input type='checkbox' value='' class="todo-task-check" data-cmd="check-task" {{#if complete}} checked {{/if}} />
-    <span class='text task-text'>
+    <input  type='checkbox' 
+            class="todo-task-check" 
+            data-cmd="check-task" {{#if complete}}checked{{/if}}/>
+    <span class='text {{#if deleted}}delted{{else}}task{{/if}}-text'>
       {{task}} 
     </span>
     <div class='tools'>
-      <i class='glyphicon glyphicon-trash todo-task-delete' data-cmd="delete-task"></i>
+      {{#if deleted}}
+        <i  class='glyphicon glyphicon-repeat todo-task-recover' 
+            data-cmd="recover-task" 
+            title="Recover task"></i>
+      {{else}}
+        <i  class='glyphicon glyphicon-share todo-task-send' 
+            data-cmd="send-task" 
+            title="Send task"></i>
+      {{/if}}
+      <i  class='glyphicon glyphicon-trash todo-task-delete' 
+          data-cmd="{{#if deleted}}remove{{else}}delete{{/if}}-task" 
+          title="{{#if deleted}}Remove{{else}}Delete{{/if}} task"></i>
     </div>
   </li>
-{{/unless}}

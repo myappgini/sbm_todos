@@ -1,4 +1,7 @@
 /* Widget: TODO LIST */
+.todos-content>.box {
+  margin-bottom: 1px;
+}
 .todo-list {
   margin: 0;
   padding: 0;
@@ -27,7 +30,7 @@
   display: inline-block;
   margin-left: 5px;
   font-weight: 600;
-  width: 75%;
+  width: 65%;
 }
 
 .todo-list>li .label {

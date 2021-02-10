@@ -31,16 +31,46 @@ if ($cmd) {
             echo $html;
             break;
         case 'get-todo':
+            $tasks['list_delete'] = false;
             $html = $handlebars->render('todo', $tasks);
             echo $html;
             break;
+        case 'get-deleted':
+            $tasks['list_delete'] = true;
+            $html = $handlebars->render('todo', $tasks);
+            echo $html;
+            break;
+        case 'removed-deleted':
+            unset($tasks['deleted_tasks']);
+            $res = update_data($data_selector, $tasks);
+            $tasks['list_delete'] = false;
+            echo $handlebars->render('todo', $tasks);
+            break;
+        case 'remove-task':
+            unset($tasks['deleted_tasks'][$data_selector['ix']]);
+            $res = update_data($data_selector, $tasks);
+            echo 'removed: '. $res;
+            break;
         case 'delete-task':
+            $uid = uniqid();
             $tasks['tasks'][$data_selector['ix']]['deleted']=true;
             $tasks['tasks'][$data_selector['ix']]['date_deleted']=date('d.m.y h:m:s');
-            $tasks['deleted_tasks'][$data_selector['ix']]=$tasks['tasks'][$data_selector['ix']];
+            $tasks['deleted_tasks'][$uid]=$tasks['tasks'][$data_selector['ix']];
+            $tasks['deleted_tasks'][$uid]['uid']=$uid;
             unset($tasks['tasks'][$data_selector['ix']]);
             $res = update_data($data_selector, $tasks);
             echo 'deleted: '. $res;
+            break;
+        case 'recover-task':
+            $uid = uniqid();
+            $tasks['deleted_tasks'][$data_selector['ix']]['deleted']=false;
+            $tasks['deleted_tasks'][$data_selector['ix']]['recovered_deleted']=date('d.m.y h:m:s');
+
+            $tasks['tasks'][$uid]=$tasks['deleted_tasks'][$data_selector['ix']];
+            $tasks['tasks'][$uid]['uid']=$uid;
+            unset($tasks['deleted_tasks'][$data_selector['ix']]);
+            $res = update_data($data_selector, $tasks);
+            echo 'recovered: '. $res;
             break;
         case 'edit-task':
             if (!$data_selector['nt']) {
@@ -59,15 +89,15 @@ if ($cmd) {
             echo 'edited: '. $res;
             break;
         case 'get-values':
-            $res['length']=$tasks['length'];
-            $res['deleted']=$tasks['deleted'];
-            $res['listed']=$tasks['listed'];
-            $res['completed']=$tasks['completed'];
+            $res['length']= is_null($tasks['length'])?0:$tasks['length'];
+            $res['deleted']=is_null($tasks['deleted'])?0:$tasks['deleted'];
+            $res['listed']=is_null($tasks['listed'])?0:$tasks['listed'];
+            $res['completed']=is_null($tasks['completed'])?0:$tasks['completed'];
             echo json_encode($res);
             break;
         case 'add-task':
             if (!$data_selector['tk']) {
-                echo "{error:'something worng'}";
+                echo "{error:'something wrong'}";
                 break;
             }
             $task = add_data($data_selector);
@@ -75,7 +105,7 @@ if ($cmd) {
             echo $html;
             break;
         default:
-            echo "{error:'something worng!!!'}";
+            echo "{error:'something wrong!!!'}";
             break;
     }
     return;
@@ -89,6 +119,7 @@ function get_data(&$data)
 function add_data(&$data)
 {
     $tasks = get_data($data);
+    $uid = uniqid();
     $task = [
         'task' => $data['tk'],
         'complete' => false,
@@ -97,8 +128,9 @@ function add_data(&$data)
         'edited' => [$data['tk']],
         'deleted' => false,
         'date_deleted' => false,
+        'uid' => $uid,
     ];
-    $tasks['tasks'][uniqid()] = $task;
+    $tasks['tasks'][$uid] = $task;
 
     $res = update_data($data, $tasks);
 

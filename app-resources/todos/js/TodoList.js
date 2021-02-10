@@ -15,6 +15,14 @@ const input_edit = function (text) {
   });
 }
 
+const this_obj = function (obj) {
+  const $this = $j(obj);
+  const $li = $this.closest('li');
+  const cmd = $this.data('cmd');
+  const ix = $li.data('ix')
+  return [$this, $li, cmd, ix];
+}
+
 $j(function () {
   ajax_todo({
     cmd: 'option-todo'
@@ -24,10 +32,13 @@ $j(function () {
   });
 });
 
-$j('body').on('click', '.todo-dropdown-content', function () {
+// * Open tasks functions, show deletes & remove all deleted tasks
+$j('body').on('click', '.todo-dropdown-content, .view-trash, .back-todos', function () {
+  [$this, $li, cmd, ix] = this_obj(this);
+  console.log(cmd)
   $j('div.todos-content').html('Loading Content...');
   ajax_todo({
-    cmd: 'get-todo'
+    cmd
   }).done(function (res) {
     $j('div.todos-content').html(res);
     $j('.todo-list').sortable({
@@ -38,7 +49,7 @@ $j('body').on('click', '.todo-dropdown-content', function () {
     });
     get_values();
   })
-  $j(this).closest('li').toggleClass('open');
+  $li.hasClass('open') ? true : $li.toggleClass('open');
 })
 
 $j('body').on('click', '.close-remove', function () {
@@ -47,15 +58,12 @@ $j('body').on('click', '.close-remove', function () {
 
 // * Done to-do
 $j('body').on('click', '.todo-task-check', function () {
-  const $this = $j(this);
-  const $li = $this.closest('li');
-
+  [$this, $li, cmd, ix] = this_obj(this);
   const data = {
-    cmd: $this.data('cmd'),
-    ix: $li.data('ix'),
+    cmd,
+    ix,
     complete: $this.is(":checked") ? true : false,
   }
-
   ajax_todo(data).done(function (res) {
     console.log(res);
     data.complete ? $li.addClass('done') : $li.removeClass('done');
@@ -65,9 +73,9 @@ $j('body').on('click', '.todo-task-check', function () {
 
 // * Add to-do
 $j('body').on('click', '.add-todo-task', function () {
-  const $this = $j(this);
+  [$this, $li, cmd, ix] = this_obj(this);
   const data = {
-    cmd: $this.data('cmd'),
+    cmd,
     task: $j('.task-to-add').val()
   }
   ajax_todo(data).done(function (res) {
@@ -77,16 +85,13 @@ $j('body').on('click', '.add-todo-task', function () {
   })
 });
 
-// * Delete to-do
-$j('body').on('click', '.todo-task-delete', function () {
-  const $this = $j(this);
-  const $li = $this.closest('li');
-  const data = {
-    cmd: $this.data('cmd'),
-    ix: $li.data('ix'),
-  }
-  if (data.cmd != 'delete-task') return;
-  ajax_todo(data).done(res => {
+// * Delete/Remove/recover to-do
+$j('body').on('click', '.todo-task-delete, .todo-task-recover', function () {
+  [$this, $li, cmd, ix] = this_obj(this);
+  ajax_todo({
+    cmd,
+    ix
+  }).done(res => {
     console.log(res);
     get_values()
   })
@@ -94,32 +99,30 @@ $j('body').on('click', '.todo-task-delete', function () {
 });
 
 // * Edit to-do
-$j('body').on('click focusout', '.task-text', function () {
-
-  const $span = $j(this);
-  const $li = $span.closest('li');
+$j('body').on('click focusout', '.task-text, .input-edit-task', function () {
+  [$this, $li, cmd, ix] = this_obj(this);
   let tb = $li.find('input.input-edit-task');
 
   if (tb.length) {
-    $span.text(tb.val()); //remove text box & put its current value as text to the div
+    $this.text(tb.val()); //remove text box & put its current value as text to the div
     const data = {
       cmd: 'edit-task',
-      ix: $li.data('ix'),
+      ix,
       newtext: tb.val(),
     }
     ajax_todo(data).done(function (res) {
       console.log(res)
     });
   } else {
-    tb = input_edit($span.text()); //construct text box
-    $span.empty().append(tb); //add new text box
+    tb = input_edit($this.text()); //construct text box
+    $this.empty().append(tb); //add new text box
     tb.focus(); //put text box on focus
   }
 });
 
 $j(document).keyup(function (e) {
   if ($j(".input-edit-task").is(":focus") && (e.keyCode == 13)) {
-    $j('.task-text').trigger('click');
+    $j('.input-edit-task').trigger('focusout');
   }
   if ($j(".form-control.task-to-add").is(":focus") && (e.keyCode == 13)) {
     $j('button.add-todo-task').trigger('click');
@@ -138,7 +141,7 @@ function get_values() {
   })
 }
 
-//122---115---133--145---150---151---149---144---138
+//122---115---133--145---150---151---149---144---138---141---144---
 const tasks = {
   "tasks": [{
       "task": {
