@@ -58,7 +58,7 @@ if ($cmd) {
         case 'recover-task':
             $uid = uniqid();
             $tasks['deleted_tasks'][$data['ix']]['deleted']=false;
-            $tasks['deleted_tasks'][$data['ix']]['details'][] = add_message("Recovered task");
+            $tasks['deleted_tasks'][$data['ix']]['details'][] = add_msg("Recovered task");
 
             $tasks['tasks'][$uid]=$tasks['deleted_tasks'][$data['ix']];
             $tasks['tasks'][$uid]['uid']=$uid;
