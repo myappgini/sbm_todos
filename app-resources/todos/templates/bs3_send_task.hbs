@@ -1,0 +1,19 @@
+<small>
+  {{> boxHeader send_box_options}}
+    <div class="task-content" data-ix="{{uid}}" >
+        <div class="form-group">
+          <label>Send to Users</label>
+          <input id="todo-list-users" hidden="true">
+          <span id="users-list" ></span>
+        </div>
+        <div class="form-group">
+          <input  type='checkbox' 
+                  class="preserve-task" />
+          <label class='text'>
+            Preserve my task
+          </label>
+        </div>
+        {{> btn send_options.send_btn}}
+    </div>
+  {{> boxFooter box_options}}
+</small>

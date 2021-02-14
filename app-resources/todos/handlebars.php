@@ -17,7 +17,7 @@ use Handlebars\Loader\FilesystemLoader;
 $currDir = dirname(__FILE__);
 
 # Set the partials files
-$partialsDir = __DIR__ . "/templates";
+$partialsDir = [__DIR__ . "/templates",__DIR__ . "/templates/elements"];
 $partialsLoader = new FilesystemLoader(
     $partialsDir,
     [
@@ -81,6 +81,13 @@ function registerHelpers($handlebars)
         function ($template, $context, $args, $source) {
             $mi = getMemberInfo();
             return $mi['admin'] ? $template->render($context) : false;
+        }
+    );
+    
+    $handlebars->addHelper(
+        "app_datetime",
+        function ($template, $context, $args, $source) {
+            return app_datetime($context->get($args), 'dt');
         }
     );
 

@@ -1,0 +1,29 @@
+<div
+  class="modal fade in {{class}}"
+  id="{{id}}"
+  role="dialog"
+  aria-labelledby="title-{{id}}"
+>
+  <div 
+    class="modal-dialog modal-{{size}}" 
+    role="document"
+  >
+    <div class="modal-content">
+      <div class="modal-header {{header_class}}">
+        {{#if dismiss}}
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">
+            &times;
+          </span>
+        </button>
+        {{/if}}
+        <h5 class="modal-title" id="title-{{id}}" >
+          {{headline}}
+        </h5>
+      </div>
+      <div class="modal-body {{body_class}}">

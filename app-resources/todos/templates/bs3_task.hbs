@@ -1,11 +1,11 @@
-  <li data-ix = "{{uid}}" class="{{#if complete}} done {{/if}}">
+  <li data-ix = "{{uid}}" class="{{#if complete}}done{{else}}{{#if from}}warning{{else}}success{{/if}}{{/if}} {{#if from}}warning{{/if}} task-content">
     <span class='handle'>
       <i class='glyphicon glyphicon-th'></i>
     </span>
     <input  type='checkbox' 
             class="todo-task-check" 
             data-cmd="check-task" {{#if complete}}checked{{/if}}/>
-    <span class='text {{#if deleted}}delted{{else}}task{{/if}}-text'>
+    <span class='text {{#if deleted}}delted{{else}}task{{/if}}-text' data-cmd="edit-task">
       {{task}} 
     </span>
     <div class='tools'>
@@ -14,12 +14,29 @@
             data-cmd="recover-task" 
             title="Recover task"></i>
       {{else}}
-        <i  class='glyphicon glyphicon-share todo-task-send' 
-            data-cmd="send-task" 
-            title="Send task"></i>
+        <i  class='glyphicon glyphicon-share todo-task-detail' 
+            data-cmd="task-detail" 
+            title="Open task detail"></i>
       {{/if}}
       <i  class='glyphicon glyphicon-trash todo-task-delete' 
           data-cmd="{{#if deleted}}remove{{else}}delete{{/if}}-task" 
-          title="{{#if deleted}}Remove{{else}}Delete{{/if}} task"></i>
+          title="{{#if deleted}}Remove{{else}}Delete{{/if}} task">
+      </i>
+    </div>
+    <div class="todo-tags">
+      {{#if description}}
+        <i class="glyphicon glyphicon-info-sign" title="This task has description" ></i>
+      {{/if}}
+      {{#if from}}
+        <span class="label label-info" title="From {{from}}"><i class="glyphicon glyphicon-arrow-down"></i> {{from}}</span>
+      {{/if}}
+      {{#if send_to}}
+        <span class="label label-info" title="Send task to {{send_to}}"><i class="glyphicon glyphicon-arrow-up"></i> {{send_to}}</span>
+      {{/if}}
+      {{#unless complete}}
+        {{#if due}}
+          <span class="label label-warning due-tag" title="Due date">{{due}}</span>
+        {{/if}}
+      {{/unless}}
     </div>
   </li>

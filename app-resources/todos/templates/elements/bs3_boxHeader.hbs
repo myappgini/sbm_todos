@@ -1,0 +1,22 @@
+<div class="box box-{{color}} {{#if solid}}box-solid{{/if}} {{class}}" {{attr}}>
+  <div class="box-header {{#if with-border}}with-border{{/if}}" >
+    <h5>{{headline}}</h5>
+    {{#if box-tool.enable}}
+    <div class="box-tools pull-right">
+      {{#if box-tool.collapsable}}
+        <button type="button" 
+                class="btn btn-box-tool" 
+                data-widget="collapse">
+                <i class=" glyphicon glyphicon-minus"></i>
+        </button>
+      {{/if}}
+      {{#if box-tool.removable}}
+        <button type="button" 
+                class="btn btn-box-tool" 
+                data-widget="remove">
+                <i class="glyphicon glyphicon-remove"></i></button>
+      {{/if}}
+    </div>
+    {{/if}}
+  </div>
+  <div class="box-body">

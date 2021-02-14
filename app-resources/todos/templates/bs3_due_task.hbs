@@ -1,0 +1,19 @@
+<small>
+    {{> boxHeader due_box_options}}
+        <div class="task-content" data-ix="{{uid}}" >
+            <div class="form-group">
+                <label class="control-label" for="due-task">Select Date & Time</label>
+                <div class="">
+                    <div class="input-group date datetimepicker">
+                        <input type="text" class="form-control" name="due-task" id="due-task" value="{{#app_datetime due}}">
+                        <span class="input-group-addon">
+                            <span class="glyphicon glyphicon-calendar">
+                            </span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            {{> btn due_options.set_due_btn}}
+        </div>
+    {{> boxFooter}}
+</small>

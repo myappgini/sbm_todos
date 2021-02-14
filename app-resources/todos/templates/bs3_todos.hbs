@@ -1,0 +1,56 @@
+<!-- TO DO List -->
+<div class='box {{#if list_delete}}box-danger{{else}}box-primary{{/if}}'>
+  <div class='box-header'>
+    <i class='glyphicon glyphicon-list-alt'></i>
+    <h3 class='box-title'>
+      {{#if list_delete}}Deleted {{/if}}To Do List
+    </h3>
+    <div class='box-tools pull-right'>
+      <button type='button' 
+        class='btn btn-box-tool view-trash' 
+        title="{{#if list_delete}}Empty{{else}}View{{/if}} trash" 
+        data-cmd="{{#if list_delete}}removed{{else}}get{{/if}}-deleted">
+        <i class='glyphicon glyphicon-trash'>{{#unless list_delete}}<span class="badge label-trash">0</span>{{/unless}}</i>
+      </button>
+      {{#if list_delete}}
+      <button type='button' class='btn btn-box-tool back-todos' title="Back to-do list" data-cmd="get-todo">
+        <i class='glyphicon glyphicon-chevron-left'></i>
+      </button>
+      {{/if}}
+      <button type='button' class='btn btn-box-tool close-remove' title="Close to-do list">
+        <i class='glyphicon glyphicon-remove'></i>
+      </button>
+    </div>
+    {{#unless list_delete}}
+      {{> progress_bar}}
+    {{/unless}}
+  </div>
+  <div class='box-body'>
+    <ul class='todo-list'>
+      {{#unless list_delete}}
+        {{#each tasks}}
+            {{> task}}
+        {{/each}}
+      {{else}}
+        {{#each deleted_tasks}}
+          {{> task}}
+        {{/each}}
+      {{/unless}}
+    </ul>
+
+  </div>
+  <div class='box-footer clearfix no-border'>
+    {{#unless list_delete}}
+    <div class='input-group'>
+      <input type='text' class='form-control task-to-add' placeholder='Enter task...' />
+      <span class='input-group-btn'>
+        <button class='btn btn-default add-todo-task' data-cmd="add-task" type='button'>
+          <i class='glyphicon glyphicon-plus'></i>
+          Add task
+        </button>
+      </span>
+    </div>
+    {{/unless}}
+  </div>
+</div>
+<!-- / TO DO List -->

@@ -1,0 +1,34 @@
+<small>
+    <div class="task-content" data-ix="{{uid}}" >
+        <div class="form-group">
+            <label>Task: </label>
+            <span class='text {{#if deleted}}delted{{else}}task{{/if}}-text' data-cmd="edit-task">
+                {{task}} 
+            </span>
+        </div>
+        <div class="form-group">
+            <input  type='checkbox' 
+                    class="todo-task-check" 
+                    data-cmd="check-task" {{#if complete}}checked{{/if}}/>
+            <label> Complete</label>
+        </div>
+        <div class="form-group">
+            <label>Description: </label>
+            <span class='text {{#if deleted}}delted{{else}}task{{/if}}-text description-task' data-cmd="edit-description">
+                {{#if description}}
+                    {{description}}
+                {{else}}
+
+                    Add a more detailed description ...
+
+                {{/if}}
+            </span>
+        </div>
+        {{#if from}}
+            <div class="form-group">
+                <label>Task from: </label>
+                <span class="label label-info" title="From {{from}}">{{from}}</span>
+            </div>
+        {{/if}}
+    </div>
+</small>
