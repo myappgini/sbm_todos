@@ -236,7 +236,7 @@ function delete_task($data, $tasks)
 {
     $uid = uniqid();
     $tasks['tasks'][$data['ix']]['deleted']=true;
-    $tasks['tasks'][$data['ix']]['details'][]= add_message("Delete this task");
+    $tasks['tasks'][$data['ix']]['details'][]= add_msg("Delete this task");
     $tasks['deleted_tasks'][$uid]=$tasks['tasks'][$data['ix']];
     $tasks['deleted_tasks'][$uid]['uid']=$uid;
     unset($tasks['tasks'][$data['ix']]);
