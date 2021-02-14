@@ -25,7 +25,7 @@ A progress bar and the amount of tasks in the trash can are displayed.
         - When is completed.
     - All this history move with the task, ever.
  - Tasks can be transferred to other users.
-    - Send and received task between users.
+    - Send and receive task between users.
  - Expiration date added. 
     - Add and set due date for your task.
  - Add more information to your task.
