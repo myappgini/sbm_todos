@@ -46,13 +46,26 @@ $j('body').on('click', '.todo-dropdown-content, .view-trash, .back-todos', funct
       placeholder: 'sort-highlight',
       handle: '.handle',
       forcePlaceholderSize: true,
-      zIndex: 999999
+      zIndex: 999999,
     });
     moment_date('.due-tag');
     get_values();
   })
   $li.hasClass('open') ? true : $li.toggleClass('open');
 })
+
+$j("body").on("sortstop", ".todo-list", function (event, ui) {
+  let sort_array = [];
+  $j(this).children('li').each(function(){
+    sort_array.push($j(this).data('ix'));
+  })
+  data.sort_array= sort_array;
+  data.cmd="sort-list";
+  ajax_todo(data).done(function (res){
+    console.log(res);
+  })
+  
+});
 
 $j('body').on('click', '.close-remove', function () {
   $j('.dropdown.todo-dropdown').removeClass('open');
@@ -232,13 +245,13 @@ function resizeModal(mod) {
       mb = mod.find('.modal-body').outerHeight(),
       mhfoh = mod.find('.modal-header').outerHeight() + mod.find('.modal-footer').outerHeight(),
       val = wh - mhfoh - 80;
-      mod.find('.modal-body').css({
-        height: val
-      });
+    mod.find('.modal-body').css({
+      height: val
+    });
   })
 }
 //122---115---133--145---150---151---149---144---138---141---144---132---after add detail function 182---225 end?---240
-const tasks = {//example
+const tasks = { //example
   "tasks": {
     "602705f9a348a": {
       "task": "task to complete",

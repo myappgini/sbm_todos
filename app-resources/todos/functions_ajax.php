@@ -22,6 +22,7 @@ $data = [
     'us' => Request::val('user', false), //user to send task
     'pr' => Request::val('preserve', false)=== "true" ? true : false, //preserve task in my list
     'du' => Request::val('due', false), //due task
+    'sr' => Request::val('sort_array', false), // array to new sort
 ];
 
 header('Content-Type: application/json; charset=utf-8');
@@ -159,6 +160,15 @@ if ($cmd) {
 
             $res .= ' sending: '. update_data($newdata, $user_tasks);
             echo $res;
+            break;
+        case "sort-list":
+            $sorted=[];
+            foreach ($data['sr'] as $value) {
+                $sorted[$value]=$tasks['tasks'][$value];
+            }
+            $tasks['tasks']=$sorted;
+            $res = update_data($data, $tasks);
+            echo "sorted: ".$res;
             break;
         default:
             echo "{error:'something wrong!!!'}";
