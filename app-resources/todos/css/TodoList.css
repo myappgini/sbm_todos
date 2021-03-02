@@ -6,7 +6,8 @@
   margin: 0;
   padding: 0;
   list-style: none;
-  overflow: auto;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .todo-list>li {

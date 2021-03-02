@@ -14,7 +14,7 @@
             data-cmd="recover-task" 
             title="Recover task"></i>
       {{else}}
-        <i  class='glyphicon glyphicon-share todo-task-detail' 
+        <i  class='glyphicon glyphicon-edit todo-task-detail' 
             data-cmd="task-detail" 
             title="Open task detail"></i>
       {{/if}}
@@ -23,20 +23,25 @@
           title="{{#if deleted}}Remove{{else}}Delete{{/if}} task">
       </i>
     </div>
-    <div class="todo-tags">
-      {{#if description}}
-        <i class="glyphicon glyphicon-info-sign" title="This task has description" ></i>
+    <div class="todo-tags row">
+      <div class="col-sm-6 left-side">
+        {{> description}}
+        {{> from}}
+        {{> send_to}}
+        {{> complete}}
+      </div>
+      <div class="col-sm-6 right-side col- ">
+      {{#if progress}}
+        <div class="progress" style="height: 2px; margin-bottom: 0px;margin-top: 5px;">
+          <div class="progress-bar " 
+            role="progressbar" 
+            aria-valuenow="0" 
+            aria-valuemin="0" 
+            aria-valuemax="100" 
+            style="width: {{progress}}%;">
+          </div>
+        </div>
       {{/if}}
-      {{#if from}}
-        <span class="label label-info" title="From {{from}}"><i class="glyphicon glyphicon-arrow-down"></i> {{from}}</span>
-      {{/if}}
-      {{#if send_to}}
-        <span class="label label-info" title="Send task to {{send_to}}"><i class="glyphicon glyphicon-arrow-up"></i> {{send_to}}</span>
-      {{/if}}
-      {{#unless complete}}
-        {{#if due}}
-          <span class="label label-warning due-tag" title="Due date">{{due}}</span>
-        {{/if}}
-      {{/unless}}
+      </div>
     </div>
   </li>

@@ -1,0 +1,19 @@
+<small>
+    {{> boxHeader progress_options.box}}
+        <div class="task-content" data-ix="{{uid}}" >
+            <div class="form-group">
+                <label class="control-label" for="progress-task">Add your task progress</label>
+                <div class="">
+                    <div class="input-group progress-task">
+                        <input type="text" class="form-control" name="progress-task" id="progress-task" value="{{progress}}">
+                        <span class="input-group-addon"> 
+                            % 
+                        </span>
+                    </div>
+                </div>
+                {{> progress_bar progress_options.progress_bar}}
+            </div>
+            {{> btn progress_options.set_btn}}
+        </div>
+    {{> boxFooter}}
+</small>

@@ -6,11 +6,16 @@
       {{#if list_delete}}Deleted {{/if}}To Do List
     </h3>
     <div class='box-tools pull-right'>
+      {{#admin}}
+        <button type='button' class='btn btn-box-tool config-todos' title="Open config to-do list" data-cmd="config-todo">
+          <i class='glyphicon glyphicon-cog'></i>
+        </button>
+      {{/admin}}
       <button type='button' 
         class='btn btn-box-tool view-trash' 
         title="{{#if list_delete}}Empty{{else}}View{{/if}} trash" 
         data-cmd="{{#if list_delete}}removed{{else}}get{{/if}}-deleted">
-        <i class='glyphicon glyphicon-trash'>{{#unless list_delete}}<span class="badge label-trash">0</span>{{/unless}}</i>
+        <i class='glyphicon glyphicon-trash'>{{#unless list_delete}}<span class="label-tasks label-danger label-trash">0</span>{{/unless}}</i>
       </button>
       {{#if list_delete}}
       <button type='button' class='btn btn-box-tool back-todos' title="Back to-do list" data-cmd="get-todo">
@@ -22,7 +27,7 @@
       </button>
     </div>
     {{#unless list_delete}}
-      {{> progress_bar}}
+      {{> progress_bar todos.progress_bar_options}}
     {{/unless}}
   </div>
   <div class='box-body'>
