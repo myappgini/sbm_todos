@@ -10,6 +10,14 @@ A progress bar and the amount of tasks in the trash can are displayed.
 
 ## New Functions!
 
+ - each task can now have its own progress
+ - instead of just a text, now you can paste a url and it becomes a link. both in the task and in the description and history of changes.
+ -  The name of the user is added in the history, it is observed that as the task can travel with its history in this way it can be recognized who has made each update.
+ - The icon for editing the detailing is changed to the pencil.
+ - The total tasks are observed in percentage completed.
+ - correction of various minor details.
+
+## Last update
  - The recycle bin will be accessible.
     - Remove task by task
     - Empty trash
