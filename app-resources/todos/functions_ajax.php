@@ -22,6 +22,8 @@ $data = [
     'us' => Request::val('user', false), //user to send task
     'pr' => Request::val('preserve', false)=== "true" ? true : false, //preserve task in my list
     'du' => Request::val('due', false), //due task
+    'sr' => Request::val('sort_array', false), // array to new sort
+    'pg' => Request::val('progress',false)//progress current task
 ];
 
 header('Content-Type: application/json; charset=utf-8');
@@ -39,6 +41,7 @@ if ($cmd) {
             // no break
         case 'get-todo':
             $tasks['list_delete'] = false;
+            $tasks += detail_options();
             $html = $handlebars->render('todos', $tasks);
             echo $html;
             break;
@@ -58,7 +61,7 @@ if ($cmd) {
         case 'recover-task':
             $uid = uniqid();
             $tasks['deleted_tasks'][$data['ix']]['deleted']=false;
-            $tasks['deleted_tasks'][$data['ix']]['details'][] = add_message("Recovered task");
+            $tasks['deleted_tasks'][$data['ix']]['details'][] = add_msg("Recovered task");
 
             $tasks['tasks'][$uid]=$tasks['deleted_tasks'][$data['ix']];
             $tasks['tasks'][$uid]['uid']=$uid;
@@ -95,7 +98,15 @@ if ($cmd) {
             echo 'edited: '. $res;
             break;
         case 'check-task':
-            $ok = $data['ok'] === "true" ? true : false;
+            $ok = $data['ok'] === "true" ;
+            if ($ok){
+                if ($tasks['tasks'][$data['ix']]['progress']<100) {
+                    $tasks['tasks'][$data['ix']]['old_progress']=$tasks['tasks'][$data['ix']]['progress'];
+                }
+                $tasks['tasks'][$data['ix']]['progress']=100;
+            }else{
+                $tasks['tasks'][$data['ix']]['progress']=$tasks['tasks'][$data['ix']]['old_progress'];
+            }
             $tasks['tasks'][$data['ix']]['complete']=$ok;
             $tasks['tasks'][$data['ix']]['details'][]=add_msg($ok ? "Task marked as completed" : "Task marked as uncompleted");
             $res = update_data($data, $tasks);
@@ -107,12 +118,22 @@ if ($cmd) {
             $res = update_data($data, $tasks);
             echo 'edited: '. $res;
             break;
+        case 'set-progress':
+            $tasks['tasks'][$data['ix']]['progress']= $data['pg'];
+            $tasks['tasks'][$data['ix']]['details'][]=add_msg("Set task progress to: ".$data['pg']);
+            $res = update_data($data, $tasks);
+            echo 'edited: '. $res;
+            break;
         case 'get-values':
             $res['length'] = is_null($tasks['length']) ? 0 : $tasks['length'];
             $res['deleted'] = is_null($tasks['deleted']) ? 0 : $tasks['deleted'];
             $res['listed'] = is_null($tasks['listed']) ? 0 : $tasks['listed'];
             $res['completed'] = is_null($tasks['completed']) ? 0 : $tasks['completed'];
+            $res['progress'] = is_null($tasks['progress']) ? 0 : $tasks['progress'];
             echo json_encode($res);
+            break;
+        case 'get-progress':
+            echo $tasks['tasks'][$data['ix']]['progress'];
             break;
         case 'add-task':
             if (!$data['tk']) {
@@ -129,7 +150,14 @@ if ($cmd) {
             $task['details']=array_reverse($task['details']);
 
             $task += detail_options();
+            $task['progress_options']['progress_bar']['width']=$task['progress'];
             $html = $handlebars->render('detail', $task);
+            echo $html;
+            break;
+        case 'config-todo':
+            $task=[];
+            $task += detail_options();
+            $html = $handlebars->render('settings', $task);
             echo $html;
             break;
         case 'send-task-user':
@@ -159,6 +187,15 @@ if ($cmd) {
 
             $res .= ' sending: '. update_data($newdata, $user_tasks);
             echo $res;
+            break;
+        case "sort-list":
+            $sorted=[];
+            foreach ($data['sr'] as $value) {
+                $sorted[$value]=$tasks['tasks'][$value];
+            }
+            $tasks['tasks']=$sorted;
+            $res = update_data($data, $tasks);
+            echo "sorted: ".$res;
             break;
         default:
             echo "{error:'something wrong!!!'}";
@@ -207,11 +244,15 @@ function update_data(&$data, $set)
     }
     $del = count($set['deleted_tasks']);
     $completed = array_value_recursive_count('complete', true, $set['tasks']);
+    $progress_values = array_column($set['tasks'],'progress');
+    $progress_sum = array_sum(array_map('porcentual',$progress_values));
+
     $elements=count($set['tasks']);
     $set['length']=$elements + $del;
     $set['deleted']=$del;
     $set['listed']=$elements;
     $set['completed']=$completed;
+    $set['progress']=$progress_sum;
     $set = "`{$data['fn']}`='" . json_encode($set) . "'";
     $sql = "UPDATE `{$data['tn']}` SET {$set} WHERE {$where}";
     $res = sql($sql, $eo);
@@ -220,6 +261,9 @@ function update_data(&$data, $set)
     $data['errors'] = $errors;
 
     return $res;
+}
+function porcentual($v){
+    return ($v/100);
 }
 function array_value_recursive_count($key, $value, array $arr)
 {
@@ -236,7 +280,7 @@ function delete_task($data, $tasks)
 {
     $uid = uniqid();
     $tasks['tasks'][$data['ix']]['deleted']=true;
-    $tasks['tasks'][$data['ix']]['details'][]= add_message("Delete this task");
+    $tasks['tasks'][$data['ix']]['details'][]= add_msg("Delete this task");
     $tasks['deleted_tasks'][$uid]=$tasks['tasks'][$data['ix']];
     $tasks['deleted_tasks'][$uid]['uid']=$uid;
     unset($tasks['tasks'][$data['ix']]);
@@ -246,92 +290,11 @@ function delete_task($data, $tasks)
 
 function add_msg($message = false)
 {
-    return $message ? ["message"=>"$message","date"=>date('Y-m-d H:i:s')] : [];
+    return $message ? ["message"=>"$message","date"=>date('Y-m-d H:i:s'),"user"=>getLoggedMemberID()] : [];
 }
 
 function detail_options()//detail modal windows options
 {
-    return [
-        'modal_header'=>[
-            "headline"=>"To-Do Task Detail",
-            "id"=>"modal-todo",
-            "size"=>"",
-            "dismiss"=>true,
-            "header_class"=>"bg-gray",
-            "body_class"=>" bg-gray todo-details",
-        ],
-        'modal_footer'=>[
-            "footer_class"=>"bg-gray",
-            "close_btn"=>[
-                "enable"=>true,
-                "text"=>"Close",
-                "color"=>"default",
-                "size"=>"xs",
-                "class"=>"",
-                "attr"=>"data-dismiss='modal'",
-                "icon"=>[
-                    "enable"=>true,
-                    "icon"=>"glyphicon glyphicon-remove",
-                ]
-            ]
-        ],
-        //send task box options
-        'send_box_options'=>[
-            "headline"=>"Send Task to user",
-            "color"=>"success",
-            "solid"=>false,
-            "with-border"=>false,
-            "class"=>"",
-            "attr"=>"",
-            "box-tool"=>[
-                "enable"=>false,
-                "collapsable"=>true,
-                "removable"=>true,
-            ],
-        ],
-        //send taks button options
-        'send_options'=>[
-            "send_btn"=>[
-                "enable"=>true,
-                "text"=>"Send",
-                "color"=>"primary",
-                "size"=>"xs",
-                "class"=>"send-taks-user pull-right",
-                "attr"=>"data-cmd='send-task-user'",
-                "icon"=>[
-                    "enable"=>true,
-                    "icon"=>"glyphicon glyphicon-send",
-                ],
-            ],
-        ],
-        //details task box options
-        'due_box_options'=>[
-            "headline"=>"Due Task",
-            "color"=>"warning",
-            "solid"=>false,
-            "with-border"=>false,
-            "class"=>"",
-            "attr"=>"",
-            "box-tool"=>[
-                "enable"=>false,
-                "collapsable"=>true,
-                "removable"=>false,
-            ],
-        ],
-        //set due taks button options
-        'due_options'=>[
-            "set_due_btn"=>[
-                "enable"=>true,
-                "text"=>"Set due",
-                "color"=>"primary",
-                "size"=>"xs",
-                "class"=>"set-due pull-right",
-                "attr"=>"data-cmd='set-due'",
-                "icon"=>[
-                    "enable"=>true,
-                    "icon"=>"glyphicon glyphicon-time",
-                ],
-            ],
-        ],
-    ];
+    include ("templates/options/options.php");
+    return $settings;
 }

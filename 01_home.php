@@ -41,5 +41,10 @@ $folderProject = dirname(__FILE__, 2) . '/hooks'; ?>
         </div>
     </div>
 </div>
+<div class="row">
+    <?php  
+        echo file_get_contents(dirname(__FILE__) . "/video-link.html")
+    ?>
+</div>
 
 

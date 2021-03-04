@@ -8,12 +8,36 @@ A simple list for managing tasks, you can add as many as you need, fulfill them,
 You can view the total of tasks and those that still need to be completed.
 A progress bar and the amount of tasks in the trash can are displayed.
 
-## Soon
+## New Functions!
 
+ - each task can now have its own progress
+ - instead of just a text, now you can paste a url and it becomes a link. both in the task and in the description and history of changes.
+ -  The name of the user is added in the history, it is observed that as the task can travel with its history in this way it can be recognized who has made each update.
+ - The icon for editing the detailing is changed to the pencil.
+ - The total tasks are observed in percentage completed.
+ - correction of various minor details.
+
+## Last update
  - The recycle bin will be accessible.
+    - Remove task by task
+    - Empty trash
+    - Recover any task and your history
  - It will be possible to view the mutations of each of the tasks (modification history).
+    - View all mutations of your task life.
+        - When is created.
+        - When is transferred.
+        - When is received.
+        - When is changed.
+        - When is deleted.
+        - When is recovered.
+        - When is completed.
+    - All this history move with the task, ever.
  - Tasks can be transferred to other users.
- - Expiration date may be added. 
+    - Send and receive task between users.
+ - Expiration date added. 
+    - Add and set due date for your task.
+ - Add more information to your task.
+
 
 ## Install
 

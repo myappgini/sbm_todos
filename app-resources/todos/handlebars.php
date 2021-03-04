@@ -1,7 +1,6 @@
 <?php
 //
 // Author: Alejandro Landini
-// from previewImages.php 7/4/18
 // update 10/9/20
 
 if (!function_exists('getMemberInfo')) {
@@ -17,7 +16,7 @@ use Handlebars\Loader\FilesystemLoader;
 $currDir = dirname(__FILE__);
 
 # Set the partials files
-$partialsDir = [__DIR__ . "/templates",__DIR__ . "/templates/elements"];
+$partialsDir = [__DIR__ . "/templates",__DIR__ . "/templates/elements",__DIR__ . "/templates/tags"];
 $partialsLoader = new FilesystemLoader(
     $partialsDir,
     [
