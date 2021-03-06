@@ -216,6 +216,12 @@ function refreshBar(ix=false){
   ajax_todo(data).done(function(res){
     val = parseInt(res) || 0;
     task_li = $j('.todo-list').find(`[data-ix='${ix}']`);
+    task_bar= task_li.find('.progress');
+    if (val >= 100){
+      task_bar.css('opacity','.2')
+    }else{
+      task_bar.css('opacity','1')
+    }
     task_bar= task_li.find('.progress-bar');
     task_bar.css('width', `${val}%`).attr('aria-valuenow', val);
   })

@@ -32,8 +32,8 @@
       </div>
       <div class="col-sm-6 right-side col- ">
       {{#if progress}}
-        <div class="progress" style="height: 2px; margin-bottom: 0px;margin-top: 5px;">
-          <div class="progress-bar " 
+        <div class="progress" style="height: 2px; margin-bottom: 0px;margin-top: 5px; {{#if complete}} opacity: .2;{{/if}}">
+          <div class="progress-bar" 
             role="progressbar" 
             aria-valuenow="0" 
             aria-valuemin="0" 
