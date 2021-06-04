@@ -253,7 +253,17 @@ function update_data(&$data, $set)
     $set['listed']=$elements;
     $set['completed']=$completed;
     $set['progress']=$progress_sum;
-    //$set["arabic"] = "العربية al-ʿarabiyyah, IPA: [æl ʕɑrɑˈbijjɐ], or عربي ʿarabī";
+    // $set["arabic"] = (object)array(
+    //     "html" => "<foo bar=\"baz\"/> &amp;",
+    //     "arabic" => "العربية al-ʿarabiyyah, IPA: [æl ʕɑrɑˈbijjɐ], or عربي ʿarabī",
+    //     "hebrew" => "    ",
+    //     "chinese" => "汉语/漢語 Hanyu; 华语/華語 Huáyǔ; 中文 Zhōngwén",
+    //     "korean" => "한국어/조선말",
+    //     "japanese" => "日本語 Nihongo",
+    //     "umlauts" => "äüöãáàß",
+    //     "escaped" => "\u65e5\u672c\u8a9e",
+    //     "emoji" => json_decode('"\u263a \ue415\ue056\ue057\ue414\ue405\ue106\ue418 \ud83d\ude04\ud83d\ude0a\ud83d\ude03\ud83d\ude09\ud83d\ude0d\ud83d\ude18"'),
+    // );//https://gist.github.com/muhqu/863757
 
     $set = "`{$data['fn']}`='" . json_encode($set, JSON_UNESCAPED_UNICODE) . "'";
 
