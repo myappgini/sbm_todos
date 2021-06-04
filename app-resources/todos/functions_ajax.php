@@ -253,7 +253,10 @@ function update_data(&$data, $set)
     $set['listed']=$elements;
     $set['completed']=$completed;
     $set['progress']=$progress_sum;
-    $set = "`{$data['fn']}`='" . json_encode($set) . "'";
+    //$set["arabic"] = "العربية al-ʿarabiyyah, IPA: [æl ʕɑrɑˈbijjɐ], or عربي ʿarabī";
+
+    $set = "`{$data['fn']}`='" . json_encode($set, JSON_UNESCAPED_UNICODE) . "'";
+
     $sql = "UPDATE `{$data['tn']}` SET {$set} WHERE {$where}";
     $res = sql($sql, $eo);
     $errors[] = $eo;
