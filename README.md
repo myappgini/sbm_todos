@@ -2,6 +2,7 @@
 
 ![Todos](https://raw.githubusercontent.com/myappgini/sbm_todos/main/screenshoots/Screenshot_20210304_120203.png)
 
+![Todos lang](https://raw.githubusercontent.com/myappgini/sbm_todos/main/screenshoots/Screenshot_20210604_222240.png)
 ## To Do List plugin
 
 A simple list for managing tasks, you can add as many as you need, fulfill them, delete them and edit them.
@@ -18,6 +19,9 @@ A progress bar and the amount of tasks in the trash can are displayed.
  - Correction of various minor details.
 
 ## Last update
+ 
+ - 04/06/21 - An existing problem with non-Latin languages, such as Arabic, is fixed
+ 
  - The recycle bin will be accessible.
     - Remove task by task
     - Empty trash
